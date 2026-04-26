@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yue Zhang — Mathematician & Computational Biologist</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f7fa;
+  --surface: #edf0f5;
+  --card: #ffffff;
+  --border: rgba(30,80,160,0.10);
+  --accent: #1a6bbf;
+  --accent2: #2a9d8f;
+  --gold: #b5831a;
+  --text: #1a2233;
+  --muted: #5a6a80;
+  --heading-font: 'Cormorant Garamond', serif;
+  --mono: 'DM Mono', monospace;
+  --body: 'Outfit', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 18px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(245,247,250,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: var(--heading-font);
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--accent); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 70% at 70% 50%, rgba(26,107,191,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 20% 80%, rgba(42,157,143,0.06) 0%, transparent 60%);
+}
+
+/* animated DNA helix lines */
+.helix-wrap {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 50%;
+  overflow: hidden;
+  opacity: 0.18;
+}
+
+.helix-svg { width: 100%; height: 100%; }
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 4rem 4rem 5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-tag {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+
+.hero-name {
+  font-family: var(--heading-font);
+  font-size: clamp(3rem, 5vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.3rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+
+.hero-name em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-title {
+  font-family: var(--heading-font);
+  font-size: 1.35rem;
+  font-weight: 300;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.6s forwards;
+}
+
+.hero-desc {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 420px;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.8s forwards;
+}
+
+.hero-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.9s forwards;
+}
+
+.hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.hero-meta-item .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent2);
+  flex-shrink: 0;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 1s forwards;
+}
+
+.btn-primary {
+  padding: 0.75rem 2rem;
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+
+.btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+
+.btn-secondary {
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+.hero-right {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 4rem 4rem 2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  opacity: 0;
+  animation: fadeUp 0.8s 1.1s forwards;
+}
+
+.stat-box {
+  background: var(--card);
+  padding: 2rem;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.stat-box:hover { background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); }
+
+.stat-num {
+  font-family: var(--heading-font);
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--accent);
+  line-height: 1;
+  display: block;
+}
+
+.stat-label {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  display: block;
+}
+
+/* ── SECTION BASE ── */
+section { padding: 6rem 5rem; }
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.section-num {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+}
+
+.section-title {
+  font-family: var(--heading-font);
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  margin-left: 1rem;
+}
+
+/* ── RESEARCH ── */
+#research { background: var(--surface); }
+
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.research-card {
+  background: var(--card);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s, box-shadow 0.3s;
+  box-shadow: 0 1px 4px rgba(30,80,160,0.06);
+}
+
+.research-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s;
+}
+
+.research-card:hover::before { transform: scaleX(1); }
+.research-card:hover { background: var(--card); box-shadow: 0 6px 20px rgba(30,80,160,0.10); transform: translateY(-2px); }
+
+.research-icon {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.research-card h3 {
+  font-family: var(--heading-font);
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.research-card p {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── PUBLICATIONS ── */
+#publications { background: var(--bg); }
+
+.pub-list { display: flex; flex-direction: column; gap: 0; }
+
+.pub-item {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+
+.pub-item:hover { background: rgba(26,107,191,0.04); }
+
+.pub-year {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--accent);
+  padding-top: 0.3rem;
+  letter-spacing: 0.05em;
+}
+
+.pub-content h4 {
+  font-family: var(--heading-font);
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+}
+
+.pub-content p {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.pub-badge {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid;
+  align-self: start;
+  margin-top: 0.25rem;
+  white-space: nowrap;
+}
+
+.pub-badge.journal { border-color: var(--accent); color: var(--accent); }
+.pub-badge.conference { border-color: var(--gold); color: var(--gold); }
+.pub-badge.review { border-color: var(--accent2); color: var(--accent2); }
+
+/* ── STUDENTS ── */
+#students { background: var(--surface); }
+
+.students-intro {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 680px;
+  margin-bottom: 3rem;
+  line-height: 1.8;
+}
+
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.student-card {
+  background: var(--card);
+  padding: 1.5rem;
+  transition: background 0.2s;
+}
+
+.student-card:hover { background: var(--surface); box-shadow: 0 4px 14px rgba(30,80,160,0.08); }
+
+.student-level {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 0.5rem;
+}
+
+.student-name {
+  font-family: var(--heading-font);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+
+.student-topic {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.student-year {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--border);
+  margin-top: 0.75rem;
+  color: rgba(107,132,153,0.6);
+}
+
+/* ── TEACHING ── */
+#teaching { background: var(--bg); }
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.course-item {
+  background: var(--card);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: start;
+  transition: background 0.2s;
+}
+
+.course-item:hover { background: var(--surface); }
+
+.course-code {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  padding-top: 0.15rem;
+  min-width: 80px;
+}
+
+.course-info h4 {
+  font-size: 0.98rem;
+  font-weight: 400;
+  margin-bottom: 0.2rem;
+}
+
+.course-info p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── FUNDING ── */
+#funding { background: var(--surface); }
+
+.funding-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.funding-item {
+  background: var(--card);
+  padding: 1.25rem 1.75rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  transition: background 0.2s;
+}
+
+.funding-item:hover { background: var(--surface); }
+
+.funding-name {
+  font-family: var(--heading-font);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.funding-role {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--accent2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+}
+
+.funding-amount {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--gold);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.funding-period {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* ── CONTACT ── */
+#contact {
+  background: var(--bg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 0;
+  min-height: 360px;
+}
+
+.contact-left {
+  padding: 5rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contact-title {
+  font-family: var(--heading-font);
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+
+.contact-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-item {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.contact-label {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  min-width: 60px;
+}
+
+.contact-value {
+  font-size: 0.98rem;
+  color: var(--text);
+}
+
+.contact-value a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contact-value a:hover { color: var(--accent2); }
+
+.contact-right {
+  padding: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(26,107,191,0.05), transparent);
+}
+
+.contact-quote {
+  font-family: var(--heading-font);
+  font-size: 1.5rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--muted);
+  position: relative;
+  z-index: 1;
+}
+
+.contact-quote em { color: var(--accent); font-style: normal; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer p {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  #hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 7rem 2rem 4rem; }
+  section { padding: 4rem 2rem; }
+  .research-grid { grid-template-columns: 1fr; }
+  .courses-grid { grid-template-columns: 1fr; }
+  #contact { grid-template-columns: 1fr; }
+  .contact-left, .contact-right { padding: 3rem 2rem; }
+  footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; }
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { gap: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Yue Zhang</div>
+  <ul class="nav-links">
+    <li><a href="#research">Research</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#students">Training</a></li>
+    <li><a href="#teaching">Teaching</a></li>
+    <li><a href="#funding">Funding</a></li>
+    <li><a href="#prospective">Join Lab</a></li>
+    <li><a href="#affiliations">Affiliations</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <!-- animated helix background -->
+  <div class="helix-wrap">
+    <svg class="helix-svg" viewBox="0 0 400 900" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>
+          .helix-path { fill: none; stroke: #1a6bbf; stroke-width: 1.5; }
+          .helix-dot { fill: #2a9d8f; }
+          @keyframes drift { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+          .helix-g { animation: drift 18s linear infinite; }
+        </style>
+      </defs>
+      <g class="helix-g">
+        <!-- strand 1 -->
+        <path class="helix-path" d="M100,0 C180,60 220,120 100,180 C-20,240 20,300 100,360 C180,420 220,480 100,540 C-20,600 20,660 100,720 C180,780 220,840 100,900 C180,960 220,1020 100,1080 C-20,1140 20,1200 100,1260 C180,1320 220,1380 100,1440 C-20,1500 20,1560 100,1620 C180,1680 220,1740 100,1800"/>
+        <!-- strand 2 -->
+        <path class="helix-path" d="M300,0 C220,60 180,120 300,180 C420,240 380,300 300,360 C220,420 180,480 300,540 C420,600 380,660 300,720 C220,780 180,840 300,900 C220,960 180,1020 300,1080 C420,1140 380,1200 300,1260 C220,1320 180,1380 300,1440 C420,1500 380,1560 300,1620 C220,1680 180,1740 300,1800"/>
+        <!-- rungs -->
+        <line x1="100" y1="90" x2="300" y2="90" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <line x1="100" y1="270" x2="300" y2="270" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <line x1="100" y1="450" x2="300" y2="450" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <line x1="100" y1="630" x2="300" y2="630" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <line x1="100" y1="810" x2="300" y2="810" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <line x1="100" y1="990" x2="300" y2="990" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <line x1="100" y1="1170" x2="300" y2="1170" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <line x1="100" y1="1350" x2="300" y2="1350" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <line x1="100" y1="1530" x2="300" y2="1530" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <line x1="100" y1="1710" x2="300" y2="1710" stroke="#1a6bbf" stroke-width="0.8" opacity="0.5"/>
+        <circle class="helix-dot" cx="100" cy="90" r="4"/>
+        <circle class="helix-dot" cx="300" cy="90" r="4"/>
+        <circle class="helix-dot" cx="100" cy="270" r="4"/>
+        <circle class="helix-dot" cx="300" cy="270" r="4"/>
+        <circle class="helix-dot" cx="100" cy="450" r="4"/>
+        <circle class="helix-dot" cx="300" cy="450" r="4"/>
+        <circle class="helix-dot" cx="100" cy="630" r="4"/>
+        <circle class="helix-dot" cx="300" cy="630" r="4"/>
+        <circle class="helix-dot" cx="100" cy="810" r="4"/>
+        <circle class="helix-dot" cx="300" cy="810" r="4"/>
+        <circle class="helix-dot" cx="100" cy="990" r="4"/>
+        <circle class="helix-dot" cx="300" cy="990" r="4"/>
+        <circle class="helix-dot" cx="100" cy="1170" r="4"/>
+        <circle class="helix-dot" cx="300" cy="1170" r="4"/>
+        <circle class="helix-dot" cx="100" cy="1350" r="4"/>
+        <circle class="helix-dot" cx="300" cy="1350" r="4"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-left">
+    <div class="hero-tag">// Thompson Rivers University · Kamloops, BC</div>
+    <h1 class="hero-name"><em>Yue</em> Zhang</h1>
+    <div class="hero-title">Assistant Professor · Mathematics &amp; Statistics</div>
+    <p class="hero-desc">Mathematician and computational biologist working at the intersection of probabilistic modelling, comparative genomics, and machine learning applied to biological systems.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="dot"></span><span>Ph.D. Mathematics — University of Ottawa, 2019</span></div>
+      <div class="hero-meta-item"><span class="dot"></span><span>NSERC Discovery Grant Recipient 2024–2029</span></div>
+      <div class="hero-meta-item"><span class="dot"></span><span>16 peer-reviewed publications · 15+ students trained</span></div>
+      <div class="hero-meta-item"><span class="dot"></span><span>Co-Director, Centre for Optimization and Data Science, TRU</span></div>
+      <div class="hero-meta-item"><span class="dot"></span><span>ISCB · SOA · Statistical Society of Canada</span></div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#research" class="btn-primary">View Research</a>
+      <a href="#contact" class="btn-secondary">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="stats-grid">
+      <div class="stat-box">
+        <span class="stat-num">16</span>
+        <span class="stat-label">Publications</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">15+</span>
+        <span class="stat-label">Students Trained</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">10+</span>
+        <span class="stat-label">Intl. Conferences</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">$762K+</span>
+        <span class="stat-label">Research Funding</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Research Interests</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="research-grid reveal">
+    <div class="research-card">
+      <span class="research-icon">🧬</span>
+      <h3>Comparative Genomics</h3>
+      <p>Evolutionary studies and gene duplication to understand genomic similarities and differences across species — specializing in polyploidization, fractionation, and speciation cycles.</p>
+    </div>
+    <div class="research-card">
+      <span class="research-icon">📐</span>
+      <h3>Mathematical Modelling</h3>
+      <p>Probability models and branching processes applied to evolutionary dynamics and genetic variation. Developing novel statistical frameworks for phylogenomic inference.</p>
+    </div>
+    <div class="research-card">
+      <span class="research-icon">🤖</span>
+      <h3>Machine Learning in Biology</h3>
+      <p>Deep learning, CNNs, and LASSO-based methods for cancer subtype classification, protein structure prediction, and SNP analysis in large genomic datasets.</p>
+    </div>
+    <div class="research-card">
+      <span class="research-icon">🏥</span>
+      <h3>Oncology &amp; Medical Research</h3>
+      <p>Cancer genomics and predictive models for personalized medicine, including TCGA gene expression analysis and economic evaluation of health interventions.</p>
+    </div>
+    <div class="research-card">
+      <span class="research-icon">📊</span>
+      <h3>Statistical Genomics</h3>
+      <p>Leveraging data mining, algorithm development, and statistical analysis to extract biological insights from high-throughput sequencing data.</p>
+    </div>
+    <div class="research-card">
+      <span class="research-icon">🔗</span>
+      <h3>Interdisciplinary Collaboration</h3>
+      <p>Integrating graph theory, applied statistics, and AI tools with biology, ecology, and public health — including AI ethics in educational contexts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Selected Publications</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="pub-list reveal">
+
+    <div class="pub-item">
+      <div class="pub-year">2025</div>
+      <div class="pub-content">
+        <h4>Branching-Process Modeling of Homology Distribution in Salmonid Genomes</h4>
+        <p>Zhang Y., Sankoff D. — Journal of Computational Biology (accepted)</p>
+      </div>
+      <span class="pub-badge journal">Journal</span>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-year">2025</div>
+      <div class="pub-content">
+        <h4>Enhancing Cancer Subtype Classification through CNNs: A DeepInsight Analysis of TCGA Gene Expression Data</h4>
+        <p>Li C., Yan Y., Lin W., Zhang Y. — Health Information Science and Systems, 13(1): 33</p>
+      </div>
+      <span class="pub-badge journal">Journal</span>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-year">2025</div>
+      <div class="pub-content">
+        <h4>Economic Evaluation of Proactive PTSI Mitigation Programs for Public Safety Personnel</h4>
+        <p>Azadehyaei H., Zhang Y., et al. — Int. Journal of Environmental Research and Public Health, 22(5):809</p>
+      </div>
+      <span class="pub-badge journal">Journal</span>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-year">2025</div>
+      <div class="pub-content">
+        <h4>Centromere Divergence and Allopolyploidy Reshape Carnivorous Sundew Genomes</h4>
+        <p>Robledillo L.Á., …, Zhang Y., Zheng C., et al. — Nature Communications (under review)</p>
+      </div>
+      <span class="pub-badge review">Under Review</span>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-year">2025</div>
+      <div class="pub-content">
+        <h4>Leveraging LASSO-Based Methodologies for Enhanced SNP Analysis in Plant Genomes</h4>
+        <p>Puthiuedth N., Zeinalinesaz F., Hou D., Zhang Y., Lin W., Yan Y. — Bioinformatics Advances, 5(1)</p>
+      </div>
+      <span class="pub-badge journal">Journal</span>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-year">2022</div>
+      <div class="pub-content">
+        <h4>Buxus and Tetracentron Genomes Help Resolve Eudicot Phylogeny, Ancient Polyploidy, and Paleogenomes</h4>
+        <p>Chanderbali A.S., Jin L., Xu Q., Zhang Y., et al. — Nature Communications, 13: 643</p>
+      </div>
+      <span class="pub-badge journal">Journal</span>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-year">2021</div>
+      <div class="pub-content">
+        <h4>Integrated Synteny- and Similarity-Based Inference on the Polyploidization-Fractionation Cycle</h4>
+        <p>Zhang Y., Yu Z., Zheng C., Sankoff D. — Interface Focus, 11: 20200059</p>
+      </div>
+      <span class="pub-badge journal">Journal</span>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-year">2019</div>
+      <div class="pub-content">
+        <h4>Branching Out to Speciation with a Birth-and-Death Model of Fractionation: the Malvaceae</h4>
+        <p>Zhang Y., Zheng C., Islam S., Kim Y.M., Sankoff D. — IEEE/ACM Trans. Computational Biology &amp; Bioinformatics, 16</p>
+      </div>
+      <span class="pub-badge journal">Journal</span>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-year">2025</div>
+      <div class="pub-content">
+        <h4>Automated Prediction of Protein Pair Distances Based on Deep Learning (ISBRA 2025, Helsinki)</h4>
+        <p>Feng D., Li S., Zhang Y. — International Symposium on Bioinformatics Research and Applications</p>
+      </div>
+      <span class="pub-badge conference">Conference</span>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-year">2025</div>
+      <div class="pub-content">
+        <h4>Integrating Ethical AI Tools into Educational Practices for Enhancing Academic Integrity (ACM CUI 2025)</h4>
+        <p>Mitchell P., Zhang Y., Yan Y., Lin W. — ACM Conversational User Interfaces, Waterloo</p>
+      </div>
+      <span class="pub-badge conference">Conference</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- STUDENTS -->
+<section id="students">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Research Training</h2>
+    <div class="section-line"></div>
+  </div>
+  <p class="students-intro reveal">I am committed to mentoring the next generation of researchers in statistics, data science, and computational biology. My lab trains students at both undergraduate and graduate levels, with an emphasis on inclusive mentorship and international diversity.</p>
+  <div class="students-grid reveal">
+
+    <div class="student-card">
+      <div class="student-level">Graduate · 2025–2026</div>
+      <div class="student-name">Mengyu Liu</div>
+      <div class="student-topic">TextCNN and Attention Models for Sensitive Information Masking in Unstructured Text</div>
+    </div>
+
+    <div class="student-card">
+      <div class="student-level">Graduate · 2025–2026</div>
+      <div class="student-name">Onyejiaka Emmanuella</div>
+      <div class="student-topic">Benchmarking Algorithms for Gene Regulatory Network Inference from Single-Cell Transcriptomics</div>
+    </div>
+
+    <div class="student-card">
+      <div class="student-level">Graduate · 2025–2026</div>
+      <div class="student-name">Yuzhuo Ye</div>
+      <div class="student-topic">Improving Similarity-Based Models for Polyploidy Detection: Ks, 4Dtv, and MCScanX Pipeline</div>
+    </div>
+
+    <div class="student-card">
+      <div class="student-level">Graduate · 2025–2026</div>
+      <div class="student-name">Feng Gu</div>
+      <div class="student-topic">Zoobenthic Community Indicators for Sediment Contamination Assessment (co-supervised with Dr. Jabed Tomal)</div>
+    </div>
+
+    <div class="student-card">
+      <div class="student-level">Graduate · 2025–2026</div>
+      <div class="student-name">Hadiseh Azadehyaei</div>
+      <div class="student-topic">ML-Driven Community Structure Analysis of Soil Microbial Biodiversity</div>
+    </div>
+
+    <div class="student-card">
+      <div class="student-level">Graduate · 2023–2024</div>
+      <div class="student-name">Changda Li</div>
+      <div class="student-topic">Cancer Subtype Classification via CNNs — Published in Health Information Science and Systems</div>
+    </div>
+
+    <div class="student-card">
+      <div class="student-level">Graduate · 2023–2024</div>
+      <div class="student-name">Duo Feng</div>
+      <div class="student-topic">Deep Learning for Protein Structure Prediction in SCOP — Presented at ISBRA 2025</div>
+    </div>
+
+    <div class="student-card">
+      <div class="student-level">Graduate · 2022</div>
+      <div class="student-name">Linxi Li</div>
+      <div class="student-topic">Sequence Similarity Distributions · Now PhD Candidate, University of Saskatchewan</div>
+    </div>
+
+    <div class="student-card">
+      <div class="student-level">Undergraduate · 2025</div>
+      <div class="student-name">César Daniel Ortiz Aguilera</div>
+      <div class="student-topic">Genetic Diversity and Disease Resistance in Crop Genomes — Mitacs Globalink GRI</div>
+    </div>
+
+    <div class="student-card">
+      <div class="student-level">Undergraduate · 2022–2023</div>
+      <div class="student-name">Alisa Dmitrieva</div>
+      <div class="student-topic">Feature Selection on Genome-Wide Association Studies — UREAP Award Recipient</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TEACHING -->
+<section id="teaching">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Teaching</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="courses-grid reveal">
+    <div class="course-item">
+      <div class="course-code">STAT 1200</div>
+      <div class="course-info">
+        <h4>Introduction to Statistics</h4>
+        <p>Statistical methods, probability, and fundamental concepts in statistical reasoning</p>
+      </div>
+    </div>
+    <div class="course-item">
+      <div class="course-code">STAT 2000</div>
+      <div class="course-info">
+        <h4>Probability and Statistics</h4>
+        <p>Intermediate probability and statistical reasoning for math and science students</p>
+      </div>
+    </div>
+    <div class="course-item">
+      <div class="course-code">STAT 4990</div>
+      <div class="course-info">
+        <h4>Selected Topics in Statistics</h4>
+        <p>Advanced undergraduate topics; serves as conditional course for graduate admissions</p>
+      </div>
+    </div>
+    <div class="course-item">
+      <div class="course-code">STAT 5310</div>
+      <div class="course-info">
+        <h4>Statistical Design &amp; Inference for Data Science</h4>
+        <p>Graduate-level experimental design and statistical inference in data science</p>
+      </div>
+    </div>
+    <div class="course-item">
+      <div class="course-code">DASC 5420</div>
+      <div class="course-info">
+        <h4>Theoretical Machine Learning</h4>
+        <p>Model complexity, generalization, optimization; NLP, speech recognition, computer vision</p>
+      </div>
+    </div>
+    <div class="course-item">
+      <div class="course-code">DASC 6310</div>
+      <div class="course-info">
+        <h4>Data Analysis in Biology &amp; Life Sciences</h4>
+        <p>Advanced statistical methodologies for biological and life sciences datasets</p>
+      </div>
+    </div>
+    <div class="course-item">
+      <div class="course-code">DASC 6510</div>
+      <div class="course-info">
+        <h4>Selected Topics in Data Science</h4>
+        <p>Design of Experiments — principles and methodologies for scientific research, hypothesis development, data analysis and interpretation</p>
+      </div>
+    </div>
+    <div class="course-item">
+      <div class="course-code">DASC 6810</div>
+      <div class="course-info">
+        <h4>Data Science Seminar</h4>
+        <p>Graduate seminar series covering current topics and research developments in data science</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="funding">
+  <div class="section-header reveal">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Grants &amp; Funding</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="funding-list reveal">
+    <div class="funding-item">
+      <div>
+        <div class="funding-name">NSERC Discovery Grant</div>
+        <div class="funding-role">Principal Investigator</div>
+      </div>
+      <div>
+        <div class="funding-amount">$38,000/yr + $12,500</div>
+        <div class="funding-period">2024–2029</div>
+      </div>
+    </div>
+    <div class="funding-item">
+      <div>
+        <div class="funding-name">Genome BC</div>
+        <div class="funding-role">Co-Leader</div>
+      </div>
+      <div>
+        <div class="funding-amount">$500,000</div>
+        <div class="funding-period">2025–2028</div>
+      </div>
+    </div>
+    <div class="funding-item">
+      <div>
+        <div class="funding-name">Mitacs Globalink Research Internship</div>
+        <div class="funding-role">Principal Investigator</div>
+      </div>
+      <div>
+        <div class="funding-amount">$6,000+</div>
+        <div class="funding-period">2025</div>
+      </div>
+    </div>
+    <div class="funding-item">
+      <div>
+        <div class="funding-name">Research Training Recognition Fund — TRU</div>
+        <div class="funding-role">Principal Investigator</div>
+      </div>
+      <div>
+        <div class="funding-amount">$9,265</div>
+        <div class="funding-period">2024–2025</div>
+      </div>
+    </div>
+    <div class="funding-item">
+      <div>
+        <div class="funding-name">Tripartite Faculty Research Fund — TRU</div>
+        <div class="funding-role">Principal Investigator</div>
+      </div>
+      <div>
+        <div class="funding-amount">$7,500</div>
+        <div class="funding-period">2023</div>
+      </div>
+    </div>
+    <div class="funding-item">
+      <div>
+        <div class="funding-name">TRU Internal Research Fund (×2)</div>
+        <div class="funding-role">Principal Investigator</div>
+      </div>
+      <div>
+        <div class="funding-amount">$10,000</div>
+        <div class="funding-period">2022 · 2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROSPECTIVE STUDENTS -->
+<section id="prospective" style="background: var(--bg);">
+  <div class="section-header reveal">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Join the Lab</h2>
+    <div class="section-line"></div>
+  </div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border);" class="reveal">
+
+    <div style="background: var(--card); padding: 2.5rem;">
+      <div style="font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;">Undergraduate Students</div>
+      <p style="font-size: 0.95rem; color: var(--text); line-height: 1.8; margin-bottom: 1.2rem;">I welcome motivated undergraduate students interested in data science, bioinformatics, and statistical mathematics. Due to limited direct funding, I encourage you to apply for competitive award programs:</p>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem;">
+        <li style="font-size: 0.88rem; color: var(--muted); padding-left: 1rem; border-left: 2px solid var(--accent);">
+          <strong style="color: var(--text);">UREAP</strong> — TRU Undergraduate Research Experience Award Program
+        </li>
+        <li style="font-size: 0.88rem; color: var(--muted); padding-left: 1rem; border-left: 2px solid var(--accent);">
+          <strong style="color: var(--text);">NSERC USRA</strong> — Undergraduate Student Research Awards
+        </li>
+      </ul>
+      <div style="margin-top: 1.5rem;">
+        <a href="https://www.tru.ca/research/undergraduate-research/undergraduate-research-opportunities.html" target="_blank" style="font-family: var(--mono); font-size: 0.75rem; color: var(--accent); text-decoration: none; letter-spacing: 0.08em;">TRU Undergraduate Research Opportunities →</a>
+      </div>
+    </div>
+
+    <div style="background: var(--card); padding: 2.5rem;">
+      <div style="font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent2); margin-bottom: 1rem;">Graduate Students</div>
+      <p style="font-size: 0.95rem; color: var(--text); line-height: 1.8; margin-bottom: 1.2rem;">Prospective graduate students are encouraged to explore the following scholarship opportunities to support their studies:</p>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem;">
+        <li style="font-size: 0.88rem; color: var(--muted); padding-left: 1rem; border-left: 2px solid var(--accent2);">
+          <strong style="color: var(--text);">Ken Lepin Research Graduate Student Award</strong>
+        </li>
+        <li style="font-size: 0.88rem; color: var(--muted); padding-left: 1rem; border-left: 2px solid var(--accent2);">
+          <strong style="color: var(--text);">Dr. Sherman Jen Graduate Entrance Award</strong>
+        </li>
+        <li style="font-size: 0.88rem; color: var(--muted); padding-left: 1rem; border-left: 2px solid var(--accent2);">
+          <strong style="color: var(--text);">BC Graduate Scholarships</strong>
+        </li>
+      </ul>
+      <div style="margin-top: 1.5rem;">
+        <a href="https://www.tru.ca/science/programs/mscds/scholarship.html" target="_blank" style="font-family: var(--mono); font-size: 0.75rem; color: var(--accent2); text-decoration: none; letter-spacing: 0.08em;">TRU Graduate Scholarships →</a>
+      </div>
+    </div>
+
+  </div>
+  <div style="margin-top: 1.5rem; padding: 1.5rem 2rem; background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--gold);" class="reveal">
+    <p style="font-size: 0.95rem; color: var(--muted); line-height: 1.8;">If you are passionate about research and eager to contribute to understanding complex biological systems, please reach out to discuss potential opportunities at <a href="mailto:yuezhang@tru.ca" style="color: var(--accent); text-decoration: none;">yuezhang@tru.ca</a>.</p>
+  </div>
+</section>
+
+<!-- AFFILIATIONS -->
+<section id="affiliations" style="background: var(--surface);">
+  <div class="section-header reveal">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Affiliations</h2>
+    <div class="section-line"></div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border);" class="reveal">
+
+    <div style="background: var(--card); padding: 2rem; text-align: center;">
+      <div style="height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+        <img src="https://ssc.ca/themes/custom/ssc_b/logo.svg" alt="SSC" style="height: 40px; width: auto; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span style="display:none; font-size:2rem;">📐</span>
+      </div>
+      <div style="font-family: var(--heading-font); font-size: 1.1rem; font-weight: 400; margin-bottom: 0.5rem;">SSC</div>
+      <div style="font-size: 0.85rem; color: var(--muted); line-height: 1.6;">Statistical Society of Canada</div>
+    </div>
+
+    <div style="background: var(--card); padding: 2rem; text-align: center;">
+      <div style="height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+        <img src="https://www.iscb.org/favicon.ico" alt="ISCB" style="height: 40px; width: auto; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span style="display:none; font-size:2rem;">🧬</span>
+      </div>
+      <div style="font-family: var(--heading-font); font-size: 1.1rem; font-weight: 400; margin-bottom: 0.5rem;">ISCB</div>
+      <div style="font-size: 0.85rem; color: var(--muted); line-height: 1.6;">International Society for Computational Biology</div>
+    </div>
+
+    <div style="background: var(--card); padding: 2rem; text-align: center;">
+      <div style="height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+        <img src="https://www.soa.org/globalassets/assets/images/home/soa-logo.png" alt="SOA" style="height: 40px; width: auto; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span style="display:none; font-size:2rem;">📊</span>
+      </div>
+      <div style="font-family: var(--heading-font); font-size: 1.1rem; font-weight: 400; margin-bottom: 0.5rem;">SOA</div>
+      <div style="font-size: 0.85rem; color: var(--muted); line-height: 1.6;">Society of Actuaries</div>
+    </div>
+
+    <div style="background: var(--card); padding: 2rem; text-align: center;">
+      <div style="height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; font-size: 2rem;">🏛️</div>
+      <div style="font-family: var(--heading-font); font-size: 1.1rem; font-weight: 400; margin-bottom: 0.5rem;">CODS</div>
+      <div style="font-size: 0.85rem; color: var(--muted); line-height: 1.6;">Co-Director, Centre for Optimization and Data Science, TRU</div>
+    </div>
+
+
+
+  </div>
+
+  <!-- Scholar + social links -->
+  <div style="display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap;" class="reveal">
+    <a href="https://github.com/YUE-lab-design" target="_blank" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.5rem; border: 1px solid var(--border); background: var(--card); font-family: var(--mono); font-size: 0.78rem; color: var(--accent); text-decoration: none; letter-spacing: 0.08em; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      💻 GitHub Lab
+    </a>
+    <a href="https://scholar.google.com/citations?hl=en&user=Vj2Ml6cAAAAJ" target="_blank" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.5rem; border: 1px solid var(--border); background: var(--card); font-family: var(--mono); font-size: 0.78rem; color: var(--accent); text-decoration: none; letter-spacing: 0.08em; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      📖 Google Scholar
+    </a>
+    <a href="https://www.researchgate.net/profile/Yue-Zhang-94" target="_blank" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.5rem; border: 1px solid var(--border); background: var(--card); font-family: var(--mono); font-size: 0.78rem; color: var(--accent); text-decoration: none; letter-spacing: 0.08em; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      🔬 ResearchGate
+    </a>
+    <a href="https://www.linkedin.com/in/yue-z-184368316/" target="_blank" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.5rem; border: 1px solid var(--border); background: var(--card); font-family: var(--mono); font-size: 0.78rem; color: var(--accent); text-decoration: none; letter-spacing: 0.08em; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      💼 LinkedIn
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-left reveal">
+    <h2 class="contact-title">Get in Touch</h2>
+    <div class="contact-items">
+      <div class="contact-item">
+        <span class="contact-label">Email</span>
+        <span class="contact-value"><a href="mailto:yuezhang@tru.ca">yuezhang@tru.ca</a></span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Phone</span>
+        <span class="contact-value">+1 (250) 371-5987</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Office</span>
+        <span class="contact-value">S334, 805 TRU Way, Kamloops, BC V2C 0C8</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">GitHub</span>
+        <span class="contact-value"><a href="https://github.com/YUE-lab-design" target="_blank">github.com/YUE-lab-design</a></span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Scholar</span>
+        <span class="contact-value"><a href="https://scholar.google.com/citations?hl=en&user=Vj2Ml6cAAAAJ" target="_blank">Google Scholar Profile</a></span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">LinkedIn</span>
+        <span class="contact-value"><a href="https://www.linkedin.com/in/yue-z-184368316/" target="_blank">linkedin.com/in/yue-z-184368316</a></span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">ResearchGate</span>
+        <span class="contact-value"><a href="https://www.researchgate.net/profile/Yue-Zhang-94" target="_blank">researchgate.net/profile/Yue-Zhang-94</a></span>
+      </div>
+    </div>
+  </div>
+  <div class="contact-right reveal">
+    <p class="contact-quote">
+      "Bridging the elegance of <em>pure mathematics</em> with the complexity of <em>living genomes</em> — one branching process at a time."
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Yue Zhang · Thompson Rivers University · Department of Mathematics and Statistics</p>
+  <p>Kamloops, BC, Canada</p>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
